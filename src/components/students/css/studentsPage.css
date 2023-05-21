@@ -1,0 +1,45 @@
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.form-control {
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.list-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.list-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.list-group-item.selected {
+  border: 2px solid green;
+}
+
+.checkmark {
+  color: green;
+  font-size: 18px;
+}
+.centered-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+
+}
+
+
+.full-width-button {
+  width: 100%;
+}
