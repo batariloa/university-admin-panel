@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import useFetchCourses from "../../hooks/useFetchCourses";
+import { useUnsubscribeStudentFromCourse } from "../../hooks/useUnsubscribeStudentFromCourse";
 
-export const CoursesListStudent = ({ courses: studentCourses }) => {
+export const CoursesListStudent = ({ courses }) => {
+  const [studentCourses, setStudentCourses] = useState(courses);
   const [selectedCourse, setSelectedCourse] = useState("");
-
-  const { courses, error, loading } = useFetchCourses();
+  const { courses: availableCourses, error, loading } = useFetchCourses();
+  const { unsubscribe } = useUnsubscribeStudentFromCourse();
 
   const handleCourseChange = (e) => {
     setSelectedCourse(e.target.value);
@@ -16,26 +17,41 @@ export const CoursesListStudent = ({ courses: studentCourses }) => {
     console.log("Selected Course:", selectedCourse);
   };
 
+  const handleUnsubscribe = (courseId) => {
+    unsubscribe(courseId)
+      .then(() => {
+        // Remove the unsubscribed course from the list
+        const updatedCourses = studentCourses.filter(
+          (course) => course.id !== courseId
+        );
+
+        setStudentCourses(updatedCourses);
+      })
+      .catch(() => console.log("Failed to unsubscribe"));
+  };
+
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Student's courses</h2>
-        <div className="d-flex">
+        <h3>Student's courses</h3>
+        <div className="d-flex justify-content-center align-items-center">
           <select
-            className="form-select me-2"
+            className="form-select me-2 h-50"
             value={selectedCourse}
             onChange={handleCourseChange}
           >
             <option value="">Select a course</option>
-            {courses.map((course) => (
+            {availableCourses.map((course) => (
               <option key={course.id} value={course.id}>
                 {course.name}
               </option>
             ))}
           </select>
-          <button className="btn btn-success" onClick={handleAddCourse}>
-            Add course
-          </button>
+          <div className="h-50 w-100">
+            <button className="btn btn-success" onClick={handleAddCourse}>
+              Add course
+            </button>
+          </div>
         </div>
       </div>
       <table className="table">
@@ -55,11 +71,13 @@ export const CoursesListStudent = ({ courses: studentCourses }) => {
               <td>{course.code}</td>
               <td>{course.description}</td>
               <td>{course.espb}</td>
-
               <td>
-                <Link to={`/delete/${course.id}`} className="btn btn-danger">
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleUnsubscribe(course.id)}
+                >
                   Unsubscribe
-                </Link>
+                </button>
               </td>
             </tr>
           ))}

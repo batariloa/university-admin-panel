@@ -11,6 +11,9 @@ import CourseForm from "./components/courses/CourseForm";
 import StudentsPage from "./components/students/StudentPage";
 import CoursesPage from "./components/courses/CoursesPage";
 import EditStudentPage from "./components/students/EditStudentPage";
+import EditCoursePage from "./components/courses/EditCoursePage";
+import ProfessorsPage from "./components/professors/ProfessorsPage";
+import EditProfessorPage from "./components/professors/EditProfessorPage";
 
 function App() {
   const { user, dispatch } = useAuthContext();
@@ -23,9 +26,18 @@ function App() {
         <Route path="/addCourse" element={<CourseForm />} />
         <Route path="/students" element={<StudentsPage />} />
         <Route path="/courses" element={<CoursesPage />} />
+        <Route path="/professors" element={<ProfessorsPage />} />
         <Route
           path="/editStudent/:studentId"
           element={<EditStudentPage></EditStudentPage>}
+        />
+        <Route
+          path="/editCourse/:courseId"
+          element={<EditCoursePage></EditCoursePage>}
+        />
+        <Route
+          path="/editProfessor/:professorId"
+          element={<EditProfessorPage />}
         />
         <Route path="/register" element={<Register />} />
 

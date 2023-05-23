@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 
 import useFetchCourses from "../../hooks/useFetchCourses";
 
-const DashboardPage = () => {
+const CoursesPage = () => {
   const { courses, loading, error } = useFetchCourses();
 
   return (
     <div className="container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h1>Select a Course</h1>
+        <h2>Courses</h2>
         <Link to="/addStudent" className="btn btn-success">
           Add course +
         </Link>
@@ -34,7 +34,10 @@ const DashboardPage = () => {
               <td>{course.description}</td>
               <td>{course.espb}</td>
               <td>
-                <Link to={`/edit/${course.id}`} className="btn btn-primary">
+                <Link
+                  to={`/editCourse/${course.id}`}
+                  className="btn btn-primary"
+                >
                   Edit
                 </Link>
               </td>
@@ -51,4 +54,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default CoursesPage;

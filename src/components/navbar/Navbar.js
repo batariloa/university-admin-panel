@@ -52,9 +52,14 @@ export function Navbar() {
                   Students
                 </Link>
               </li>
-              <li key="myBlog" className="nav-item">
+              <li className="nav-item">
                 <Link to="/courses" className="nav-link">
                   Courses
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/professors" className="nav-link">
+                  Professors
                 </Link>
               </li>
               <li key="logout" className="nav-item">

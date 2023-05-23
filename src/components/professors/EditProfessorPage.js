@@ -1,36 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useFetchStudentDetails from "../../hooks/useFetchStudent";
-import useUpdateStudent from "../../hooks/useUpdateStudent";
-import { CoursesListStudent } from "../courses/CoursesListStudent";
+import { useFetchProfessorDetails } from "../../hooks/useFetchProfessorDetails";
+import { useUpdateProfessor } from "../../hooks/useUpdateProfessor";
 
-const EditStudentPage = () => {
-  const { studentId } = useParams();
-  const [student, setStudent] = useState(null);
+const EditProfessorPage = () => {
+  const { ProfessorId: professorId } = useParams();
+  const [professor, setProfessor] = useState(null);
   const {
-    professor: fetchedStudent,
+    professor: fetchedProfessor,
     loading,
     error,
-  } = useFetchStudentDetails(studentId);
+  } = useFetchProfessorDetails(professorId);
   const {
-    updateStudent,
+    updateProfessor,
     loading: updating,
     error: updateError,
-  } = useUpdateStudent();
+  } = useUpdateProfessor();
 
   useEffect(() => {
-    if (fetchedStudent) {
-      setStudent(fetchedStudent);
+    if (fetchedProfessor) {
+      setProfessor(fetchedProfessor);
     }
-  }, [fetchedStudent]);
+  }, [fetchedProfessor]);
 
   const handleUpdate = () => {
-    updateStudent(studentId, student)
-      .then((updatedStudent) => {
-        setStudent(updatedStudent);
+    updateProfessor(professorId, professor)
+      .then((updatedProfessor) => {
+        setProfessor(updatedProfessor);
       })
       .catch((error) => {
-        console.error("Error updating student:", error);
+        console.error("Error updating Professor:", error);
       });
   };
 
@@ -42,15 +41,15 @@ const EditStudentPage = () => {
     return <p className="text-danger">Error: {error || updateError}</p>;
   }
 
-  if (!student) {
+  if (!professor) {
     return null;
   }
 
   return (
     <div className="container d-flex">
-      <div className="card mt-4">
+      <div className="card mt-4 w-100">
         <div className="card-body">
-          <h2>Student Details</h2>
+          <h2>Professor Details</h2>
           <div className="row mt-4 d-flex justify-content-center">
             <div className="col-lg">
               <div className="mb-3">
@@ -61,10 +60,10 @@ const EditStudentPage = () => {
                   type="text"
                   className="form-control"
                   id="firstName"
-                  value={student.firstName}
+                  value={professor.firstName}
                   onChange={(e) =>
-                    setStudent((prevStudent) => ({
-                      ...prevStudent,
+                    setProfessor((prevProfessor) => ({
+                      ...prevProfessor,
                       firstName: e.target.value,
                     }))
                   }
@@ -78,28 +77,11 @@ const EditStudentPage = () => {
                   type="text"
                   className="form-control"
                   id="lastName"
-                  value={student.lastName}
+                  value={professor.lastName}
                   onChange={(e) =>
-                    setStudent((prevStudent) => ({
-                      ...prevStudent,
+                    setProfessor((prevProfessor) => ({
+                      ...prevProfessor,
                       lastName: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="idNumber" className="form-label mb-0">
-                  ID Number
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="idNumber"
-                  value={student.idNumber}
-                  onChange={(e) =>
-                    setStudent((prevStudent) => ({
-                      ...prevStudent,
-                      idNumber: e.target.value,
                     }))
                   }
                 />
@@ -112,10 +94,10 @@ const EditStudentPage = () => {
                   type="email"
                   className="form-control"
                   id="email"
-                  value={student.email}
+                  value={professor.email}
                   onChange={(e) =>
-                    setStudent((prevStudent) => ({
-                      ...prevStudent,
+                    setProfessor((prevProfessor) => ({
+                      ...prevProfessor,
                       email: e.target.value,
                     }))
                   }
@@ -128,10 +110,10 @@ const EditStudentPage = () => {
                 <select
                   className="form-control"
                   id="gender"
-                  value={student.gender}
+                  value={professor.gender}
                   onChange={(e) =>
-                    setStudent((prevStudent) => ({
-                      ...prevStudent,
+                    setProfessor((prevProfessor) => ({
+                      ...prevProfessor,
                       gender: e.target.value,
                     }))
                   }
@@ -145,9 +127,6 @@ const EditStudentPage = () => {
                 Update
               </button>
             </div>
-            <div className="col-md-6 w-100 mt-3">
-              <CoursesListStudent courses={student.courses} />
-            </div>
           </div>
         </div>
       </div>
@@ -155,4 +134,4 @@ const EditStudentPage = () => {
   );
 };
 
-export default EditStudentPage;
+export default EditProfessorPage;

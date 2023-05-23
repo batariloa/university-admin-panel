@@ -32,7 +32,7 @@ const StudentsPage = () => {
   return (
     <div className="container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h1>Select a Student</h1>
+        <h2>Students</h2>
         <Link to="/addStudent" className="btn btn-success">
           Add student +
         </Link>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useFetchStudent = (studentId) => {
+const useFetchStudentDetails = (studentId) => {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -52,7 +52,7 @@ const useFetchStudent = (studentId) => {
     fetchStudent();
   }, []);
 
-  return { student, loading, error };
+  return { professor: student, loading, error };
 };
 
-export default useFetchStudent;
+export default useFetchStudentDetails;
