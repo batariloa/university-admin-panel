@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 export const useFetchProfessorDetails = (professorId) => {
   const [professor, setProfessor] = useState(null);
@@ -6,20 +7,19 @@ export const useFetchProfessorDetails = (professorId) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulating an asynchronous API call to fetch professor details
     const fetchProfessorDetails = async () => {
       try {
-        // Simulated delay of 1 second
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        // Mock data for professor details
-        const mockProfessor = {
-          id: professorId,
-          firstName: "John",
-          lastName: "Doe",
-          email: "johndoe@example.com",
-          gender: "Male",
-        };
-        setProfessor(mockProfessor);
+        const response = await axios.get(
+          `https://pavlevlajic.com/api/professor/get-professor-details/${professorId}`
+        );
+        const data = response.data;
+
+        if (response.status === 200 && data.succeeded) {
+          setProfessor(data.data);
+        } else {
+          setError("Failed to fetch professor details. Please try again.");
+        }
+
         setLoading(false);
       } catch (error) {
         setError("Failed to fetch professor details. Please try again.");

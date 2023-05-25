@@ -14,6 +14,7 @@ import EditStudentPage from "./components/students/EditStudentPage";
 import EditCoursePage from "./components/courses/EditCoursePage";
 import ProfessorsPage from "./components/professors/ProfessorsPage";
 import EditProfessorPage from "./components/professors/EditProfessorPage";
+import { AddProfessorPage } from "./components/professors/AddProfessorPage";
 
 function App() {
   const { user, dispatch } = useAuthContext();
@@ -24,6 +25,8 @@ function App() {
       <Routes>
         <Route path="/" element={<CoursesPage />} />
         <Route path="/addCourse" element={<CourseForm />} />
+        <Route path="/addProfessor" element={<AddProfessorPage />} />
+
         <Route path="/students" element={<StudentsPage />} />
         <Route path="/courses" element={<CoursesPage />} />
         <Route path="/professors" element={<ProfessorsPage />} />

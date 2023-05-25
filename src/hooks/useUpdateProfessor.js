@@ -11,12 +11,13 @@ export const useUpdateProfessor = () => {
 
     try {
       const response = await axios.put(
-        `/api/professors/${professorId}`,
+        `https://pavlevlajic.com/api/professor/save-professor`,
         updatedProfessorData
-      ); // Replace "/api/professors" with your API endpoint
+      );
       setLoading(false);
       return response.data;
     } catch (error) {
+      console.log(error);
       setError("Failed to update professor.");
       setLoading(false);
       return null;

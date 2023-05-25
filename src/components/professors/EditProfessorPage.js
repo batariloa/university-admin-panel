@@ -2,47 +2,72 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useFetchProfessorDetails } from "../../hooks/useFetchProfessorDetails";
 import { useUpdateProfessor } from "../../hooks/useUpdateProfessor";
+import { useFetchCourse } from "../../hooks/useFetchCourses";
 
 const EditProfessorPage = () => {
-  const { ProfessorId: professorId } = useParams();
+  const { professorId } = useParams();
   const [professor, setProfessor] = useState(null);
+
   const {
     professor: fetchedProfessor,
+    CourseIds: professorCourses,
     loading,
     error,
   } = useFetchProfessorDetails(professorId);
+
   const {
     updateProfessor,
-    loading: updating,
+    loading: updateLoading,
     error: updateError,
   } = useUpdateProfessor();
+
+  const { courses: allCourses } = useFetchCourse();
+
+  const [selectedCourses, setSelectedCourses] = useState([]);
 
   useEffect(() => {
     if (fetchedProfessor) {
       setProfessor(fetchedProfessor);
+      const professorCourseIds = fetchedProfessor.courses.map(
+        (course) => course.id
+      );
+      setSelectedCourses(professorCourseIds);
     }
   }, [fetchedProfessor]);
 
-  const handleUpdate = () => {
-    updateProfessor(professorId, professor)
-      .then((updatedProfessor) => {
-        setProfessor(updatedProfessor);
-      })
-      .catch((error) => {
-        console.error("Error updating Professor:", error);
+  const handleUpdate = async () => {
+    try {
+      // Exclude gender from the professor object
+      const { gender, courses, ...updatedProfessor } = professor;
+      await updateProfessor(professorId, {
+        ...updatedProfessor,
+        CourseIds: selectedCourses,
       });
+      // Update success, do something if needed
+    } catch (error) {
+      console.error("Error updating Professor:", error);
+    }
   };
 
-  if (loading || updating) {
+  const handleCourseSelection = (courseId) => {
+    if (selectedCourses.includes(courseId)) {
+      setSelectedCourses((prevSelectedCourses) =>
+        prevSelectedCourses.filter((id) => id !== courseId)
+      );
+    } else {
+      setSelectedCourses((prevSelectedCourses) => [
+        ...prevSelectedCourses,
+        courseId,
+      ]);
+    }
+  };
+
+  if (loading) {
     return <p>Loading...</p>;
   }
 
-  if (error || updateError) {
-    return <p className="text-danger">Error: {error || updateError}</p>;
-  }
-
-  if (!professor) {
-    return null;
+  if (error) {
+    return <p className="text-danger">Error: {error}</p>;
   }
 
   return (
@@ -60,7 +85,7 @@ const EditProfessorPage = () => {
                   type="text"
                   className="form-control"
                   id="firstName"
-                  value={professor.firstName}
+                  value={professor?.firstName || ""}
                   onChange={(e) =>
                     setProfessor((prevProfessor) => ({
                       ...prevProfessor,
@@ -77,7 +102,7 @@ const EditProfessorPage = () => {
                   type="text"
                   className="form-control"
                   id="lastName"
-                  value={professor.lastName}
+                  value={professor?.lastName || ""}
                   onChange={(e) =>
                     setProfessor((prevProfessor) => ({
                       ...prevProfessor,
@@ -94,7 +119,7 @@ const EditProfessorPage = () => {
                   type="email"
                   className="form-control"
                   id="email"
-                  value={professor.email}
+                  value={professor?.email || ""}
                   onChange={(e) =>
                     setProfessor((prevProfessor) => ({
                       ...prevProfessor,
@@ -104,24 +129,34 @@ const EditProfessorPage = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="gender" className="form-label mb-0">
-                  Gender
-                </label>
-                <select
+                <label htmlFor="gender">Gender:</label>
+                <input
+                  type="text"
                   className="form-control"
                   id="gender"
-                  value={professor.gender}
-                  onChange={(e) =>
-                    setProfessor((prevProfessor) => ({
-                      ...prevProfessor,
-                      gender: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
+                  value={professor?.gender || ""}
+                  readOnly
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="courses" className="form-label mb-0">
+                  Courses
+                </label>
+                {allCourses.map((course) => (
+                  <div key={course.id} className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id={course.id}
+                      value={course.id}
+                      checked={selectedCourses.includes(course.id)}
+                      onChange={() => handleCourseSelection(course.id)}
+                    />
+                    <label className="form-check-label" htmlFor={course.id}>
+                      {course.name}
+                    </label>
+                  </div>
+                ))}
               </div>
               <button className="btn btn-primary" onClick={handleUpdate}>
                 Update

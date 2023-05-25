@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import { useFetchProfessors } from "../../hooks/useFetchProfessors";
 import "./css/professorsPage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
-
-const ProfessorsPage = () => {
+export const ProfessorsPage = () => {
   const [selectedProfessor, setSelectedProfessor] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const { professors, loading, error } = useFetchProfessors();

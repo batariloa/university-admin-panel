@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import useFetchCourses from "../../hooks/useFetchCourses";
+import { useFetchCourse } from "../../hooks/useFetchCourses";
 import { useUnsubscribeStudentFromCourse } from "../../hooks/useUnsubscribeStudentFromCourse";
 
 export const CoursesListStudent = ({ courses }) => {
   const [studentCourses, setStudentCourses] = useState(courses);
   const [selectedCourse, setSelectedCourse] = useState("");
-  const { courses: availableCourses, error, loading } = useFetchCourses();
+  const { courses: availableCourses, error, loading } = useFetchCourse();
   const { unsubscribe } = useUnsubscribeStudentFromCourse();
 
   const handleCourseChange = (e) => {

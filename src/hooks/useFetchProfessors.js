@@ -6,39 +6,24 @@ export const useFetchProfessors = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulating an asynchronous API call to fetch professors
     const fetchProfessors = async () => {
       try {
-        // Simulated delay of 1 second
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        // Mock data
-        const mockProfessors = [
-          {
-            id: 1,
-            firstName: "John",
-            lastName: "Doe",
-            email: "johndoe@example.com",
-            gender: "Male",
-          },
-          {
-            id: 2,
-            firstName: "Jane",
-            lastName: "Smith",
-            email: "janesmith@example.com",
-            gender: "Female",
-          },
-          {
-            id: 3,
-            firstName: "Michael",
-            lastName: "Johnson",
-            email: "michaeljohnson@example.com",
-            gender: "Male",
-          },
-          // Add more mock professors as needed
-        ];
-        setProfessors(mockProfessors);
-        setLoading(false);
+        const response = await fetch(
+          "https://pavlevlajic.com/api/professor/get-all-professors"
+        );
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log(professors);
+          setProfessors(data.data);
+          setLoading(false);
+        } else {
+          setError("Failed to fetch professors. Please try again.");
+          setLoading(false);
+        }
       } catch (error) {
+        console.log(error);
+
         setError("Failed to fetch professors. Please try again.");
         setLoading(false);
       }

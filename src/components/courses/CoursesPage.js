@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import useFetchCourses from "../../hooks/useFetchCourses";
+import { useFetchCourse } from "../../hooks/useFetchCourses";
 
 const CoursesPage = () => {
-  const { courses, loading, error } = useFetchCourses();
+  const { courses, loading, error } = useFetchCourse();
 
   return (
     <div className="container">
