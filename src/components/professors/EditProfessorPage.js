@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { useFetchProfessorDetails } from "../../hooks/useFetchProfessorDetails";
 import { useUpdateProfessor } from "../../hooks/useUpdateProfessor";
 import { useFetchCourse } from "../../hooks/useFetchCourses";
+import { useFetchGenders } from "../../hooks/useFetchGenders";
 
 const EditProfessorPage = () => {
   const { professorId } = useParams();
   const [professor, setProfessor] = useState(null);
+  const { genders } = useFetchGenders();
 
   const {
     professor: fetchedProfessor,
@@ -37,11 +39,16 @@ const EditProfessorPage = () => {
 
   const handleUpdate = async () => {
     try {
-      // Exclude gender from the professor object
-      const { gender, courses, ...updatedProfessor } = professor;
+      console.log(fetchedProfessor);
+      console.log(genders);
+      const genderId = genders.find(
+        (gender) => gender.name === fetchedProfessor.gender
+      ).id;
+
       await updateProfessor(professorId, {
-        ...updatedProfessor,
+        ...professor,
         CourseIds: selectedCourses,
+        genderId,
       });
       // Update success, do something if needed
     } catch (error) {

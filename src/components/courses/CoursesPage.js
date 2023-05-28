@@ -37,6 +37,7 @@ const CoursesPage = () => {
                 <Link
                   to={`/editCourse/${course.id}`}
                   className="btn btn-primary"
+                  course={course}
                 >
                   Edit
                 </Link>

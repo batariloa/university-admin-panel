@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useFetchCourseDetails } from "../../hooks/useFetchCourseDetails";
-import { useFetchProfessors } from "../../hooks/useFetchProfessors";
 
 const EditCoursePage = () => {
   const { courseId } = useParams();
@@ -10,11 +9,6 @@ const EditCoursePage = () => {
     loading: courseLoading,
     error: courseError,
   } = useFetchCourseDetails(courseId);
-  const {
-    professors,
-    loading: professorLoading,
-    error: professorError,
-  } = useFetchProfessors();
 
   const [selectedProfessor, setSelectedProfessor] = useState("");
 
@@ -25,22 +19,10 @@ const EditCoursePage = () => {
     }
   }, [course]);
 
-  const handleProfessorChange = (e) => {
-    setSelectedProfessor(e.target.value);
-  };
-
   const handleSaveChanges = () => {
     // Implement logic to save changes with the selected professor
     console.log("Selected Professor:", selectedProfessor);
   };
-
-  if (courseLoading || professorLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (courseError || professorError) {
-    return <p>Error: {courseError || professorError}</p>;
-  }
 
   return (
     <div className="container">
@@ -103,24 +85,7 @@ const EditCoursePage = () => {
             onChange={() => {}}
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="professorSelect" className="form-label">
-            Professor
-          </label>
-          <select
-            className="form-select"
-            id="professorSelect"
-            value={selectedProfessor}
-            onChange={handleProfessorChange}
-          >
-            <option value="">Select a professor</option>
-            {professors.map((professor) => (
-              <option key={professor.id} value={professor.id}>
-                {professor.firstName} {professor.lastName}
-              </option>
-            ))}
-          </select>
-        </div>
+
         <button
           type="button"
           className="btn btn-primary"

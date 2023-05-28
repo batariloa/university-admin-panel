@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import useFetchStudents from "../../hooks/useFetchStudents";
+import { useFetchStudents } from "../../hooks/useFetchStudents";
 import "./css/studentsPage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";

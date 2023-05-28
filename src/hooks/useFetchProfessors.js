@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import axiosClient from "../http/axios";
+import { url } from "../global/variables";
 
 export const useFetchProfessors = () => {
   const [professors, setProfessors] = useState([]);
@@ -8,12 +10,20 @@ export const useFetchProfessors = () => {
   useEffect(() => {
     const fetchProfessors = async () => {
       try {
-        const response = await fetch(
-          "https://pavlevlajic.com/api/professor/get-all-professors"
-        );
-        const data = await response.json();
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = user?.data?.accessToken;
 
-        if (response.ok) {
+        const response = await axiosClient.get(
+          url + "/api/professor/get-all-professors",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = response.data;
+
+        if (response.status === 200) {
           console.log(professors);
           setProfessors(data.data);
           setLoading(false);

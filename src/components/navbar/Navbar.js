@@ -42,7 +42,7 @@ export function Navbar() {
           <a href="/" className="navbar-brand">
             University Admin Panel
           </a>
-          {!user && (
+          {user && (
             <ul
               className="navbar-nav me-auto mb-2 mb-lg-0"
               onClick={handleNavbarItemClick}

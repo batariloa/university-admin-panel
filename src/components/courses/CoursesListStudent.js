@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useFetchCourse } from "../../hooks/useFetchCourses";
 import { useUnsubscribeStudentFromCourse } from "../../hooks/useUnsubscribeStudentFromCourse";
 
-export const CoursesListStudent = ({ courses }) => {
-  const [studentCourses, setStudentCourses] = useState(courses);
+export const CoursesListStudent = ({ student, setStudent }) => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const { courses: availableCourses, error, loading } = useFetchCourse();
   const { unsubscribe } = useUnsubscribeStudentFromCourse();
@@ -13,19 +12,29 @@ export const CoursesListStudent = ({ courses }) => {
   };
 
   const handleAddCourse = () => {
-    // Implement logic to add the selected course
-    console.log("Selected Course:", selectedCourse);
+    const selectedCourseObj = availableCourses.find(
+      (course) => course.id === selectedCourse
+    );
+    if (selectedCourseObj) {
+      setStudent((prevStudent) => ({
+        ...prevStudent,
+        courses: [...prevStudent.courses, selectedCourseObj],
+      }));
+    }
   };
 
   const handleUnsubscribe = (courseId) => {
     unsubscribe(courseId)
       .then(() => {
         // Remove the unsubscribed course from the list
-        const updatedCourses = studentCourses.filter(
+        const updatedCourses = student.courses.filter(
           (course) => course.id !== courseId
         );
 
-        setStudentCourses(updatedCourses);
+        setStudent((prevStudent) => ({
+          ...prevStudent,
+          courses: updatedCourses,
+        }));
       })
       .catch(() => console.log("Failed to unsubscribe"));
   };
@@ -41,11 +50,12 @@ export const CoursesListStudent = ({ courses }) => {
             onChange={handleCourseChange}
           >
             <option value="">Select a course</option>
-            {availableCourses.map((course) => (
-              <option key={course.id} value={course.id}>
-                {course.name}
-              </option>
-            ))}
+            {availableCourses &&
+              availableCourses.map((course) => (
+                <option key={course.id} value={course.id}>
+                  {course.name}
+                </option>
+              ))}
           </select>
           <div className="h-50 w-100">
             <button className="btn btn-success" onClick={handleAddCourse}>
@@ -65,22 +75,24 @@ export const CoursesListStudent = ({ courses }) => {
           </tr>
         </thead>
         <tbody>
-          {studentCourses.map((course) => (
-            <tr key={course.id}>
-              <td>{course.name}</td>
-              <td>{course.code}</td>
-              <td>{course.description}</td>
-              <td>{course.espb}</td>
-              <td>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleUnsubscribe(course.id)}
-                >
-                  Unsubscribe
-                </button>
-              </td>
-            </tr>
-          ))}
+          {student &&
+            student.courses &&
+            student.courses.map((course) => (
+              <tr key={course.id}>
+                <td>{course.name}</td>
+                <td>{course.code}</td>
+                <td>{course.description}</td>
+                <td>{course.espb}</td>
+                <td>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleUnsubscribe(course.id)}
+                  >
+                    Unsubscribe
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

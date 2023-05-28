@@ -1,35 +1,39 @@
 import { useState } from "react";
+import axios from "axios";
+import { url } from "../global/variables";
 
-const useUpdateCourse = () => {
+export const useUpdateCourse = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const updateCourse = async (courseId, updatedCourse) => {
+  const updateCourse = async (updatedCourseData) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`/api/courses/${courseId}`, {
-        method: "PUT",
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = user?.data?.accessToken;
+      const config = {
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedCourse),
-      });
+      };
 
-      if (!response.ok) {
-        throw new Error("Failed to update course");
-      }
+      const response = await axios.put(
+        url + `/api/course/save-course`,
+        updatedCourseData,
+        config
+      );
 
-      // Handle the successful update
-    } catch (error) {
-      setError(error.message);
-    } finally {
       setLoading(false);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      setError("Failed to update course.");
+      setLoading(false);
+      return null;
     }
   };
 
-  return { loading, error, updateCourse };
+  return { updateCourse, loading, error };
 };
-
-export default useUpdateCourse;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { url } from "../global/variables";
 
 export const useUpdateProfessor = () => {
   const [loading, setLoading] = useState(false);
@@ -9,10 +10,19 @@ export const useUpdateProfessor = () => {
     setLoading(true);
     setError(null);
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.data?.accessToken;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
     try {
       const response = await axios.put(
-        `https://pavlevlajic.com/api/professor/save-professor`,
-        updatedProfessorData
+        url + `/api/professor/save-professor`,
+        updatedProfessorData,
+        config
       );
       setLoading(false);
       return response.data;

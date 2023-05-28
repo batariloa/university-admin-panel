@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import axiosClient from "../http/axios";
+import { url } from "../global/variables";
 
 export const useFetchCoursesForStudent = () => {
   const [courses, setCourses] = useState([]);
@@ -6,51 +8,36 @@ export const useFetchCoursesForStudent = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulated response data
-    const response = {
-      data: [
-        {
-          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          name: "Course 1",
-          code: "C001",
-          description: "This is course 1",
-          espb: 5,
-        },
-        {
-          id: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
-          name: "Course 2",
-          code: "C002",
-          description: "This is course 2",
-          espb: 3,
-        },
-      ],
-      succeeded: true,
-      statusCode: 100,
-      messageKey: "string",
-    };
-
-    // Simulate an asynchronous API call
     const fetchCourses = async () => {
       try {
-        // Simulate loading state
-        setLoading(true);
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = user?.data?.accessToken;
 
-        // Simulate delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const response = await axiosClient.get(
+          url + "/api/course/get-all-courses",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        // Set the fetched courses to the state
-        setCourses(response.data);
+        const { data } = response.data;
 
-        // Simulate success state
+        if (response.data.succeeded) {
+          setCourses(data);
+        } else {
+          setError("Failed to fetch courses. Please try again.");
+        }
+
         setLoading(false);
       } catch (error) {
-        // Set the error state
-        setError(error.message);
+        console.log("err", error);
+        setError("Failed to fetch courses. Please try again.");
         setLoading(false);
       }
     };
 
-    // Fetch courses
     fetchCourses();
   }, []);
 

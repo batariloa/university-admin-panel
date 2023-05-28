@@ -8,7 +8,7 @@ import "./css/Login.css";
 export function Login() {
   const { dispatch } = useAuthContext();
   const navigate = useNavigate();
-  const { login, error } = useLogin(dispatch);
+  const { login, error, isLoading } = useLogin(dispatch);
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -18,13 +18,12 @@ export function Login() {
     await login(emailRef.current.value, passwordRef.current.value);
   };
 
-  //handle error in login request
   useEffect(() => {
-    if (error === null) {
-      navigate("/blog");
-      return;
+    if (!isLoading && error === null) {
+      // Redirect to home page
+      navigate("/");
     }
-  }, [error, navigate]);
+  }, [isLoading, error, navigate]);
 
   return (
     <div className="Auth-form-container">

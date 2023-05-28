@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosClient from "../http/axios";
 
 export const useFetchGenders = () => {
   const [genders, setGenders] = useState([]);
@@ -8,16 +8,27 @@ export const useFetchGenders = () => {
 
   useEffect(() => {
     const fetchGenders = async () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = user?.data?.accessToken;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       setLoading(true);
       setError(null);
 
       try {
-        const response = await axios.get(
-          "https://pavlevlajic.com/api/gender/get-all-genders"
+        const response = await axiosClient.get(
+          "https://pavlevlajic.com/api/gender/get-all-genders",
+          config
         );
+        console.log("gender hook " + response);
         setGenders(response.data.data);
         setLoading(false);
       } catch (error) {
+        console.log("error");
+
         setError("Failed to fetch genders.");
         setLoading(false);
       }

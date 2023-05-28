@@ -1,1 +1,1 @@
-exports.url = "https://pavlevlajic.com/api";
+exports.url = "https://pavlevlajic.com";

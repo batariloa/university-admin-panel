@@ -6,20 +6,19 @@ export const useRegister = () => {
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const register = async (firstname, lastname, username, email, password) => {
+  const register = async (firstName, lastName, email, password, roleId) => {
     setIsLoading(true);
     setError(null);
 
     await axiosClient
       .post(
-        url + "/auth/register",
+        url + "/api/user/register-user",
         {
-          firstname,
-          lastname,
-          username,
+          firstname: firstName,
+          lastName,
           email,
           password,
-          repeatPassword: password,
+          roleId,
         },
         {
           headers: {
@@ -29,12 +28,7 @@ export const useRegister = () => {
         }
       )
       .catch((err) => {
-        if (err.name === "CanceledError") {
-          console.log("Canceled login.");
-        } else {
-          console.log("some other error", err);
-          setError("Incorrect credentials.");
-        }
+        setError("Please fill all of the required fields.");
       });
 
     setIsLoading(false);

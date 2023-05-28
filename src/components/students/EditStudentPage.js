@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useFetchStudentDetails from "../../hooks/useFetchStudent";
-import useUpdateStudent from "../../hooks/useUpdateStudent";
+import { useFetchStudentDetails } from "../../hooks/useFetchStudentDetails";
+import { useUpdateStudent } from "../../hooks/useUpdateStudent";
 import { CoursesListStudent } from "../courses/CoursesListStudent";
+import { useFetchGenders } from "../../hooks/useFetchGenders";
 
 const EditStudentPage = () => {
   const { studentId } = useParams();
   const [student, setStudent] = useState(null);
   const {
-    professor: fetchedStudent,
+    student: fetchedStudent,
     loading,
     error,
   } = useFetchStudentDetails(studentId);
+
+  const { genders } = useFetchGenders();
+
   const {
     updateStudent,
     loading: updating,
@@ -25,7 +29,15 @@ const EditStudentPage = () => {
   }, [fetchedStudent]);
 
   const handleUpdate = () => {
-    updateStudent(studentId, student)
+    const genderId = genders.find(
+      (gender) => gender.name === fetchedStudent.gender
+    )?.id;
+    const updatedStudent = {
+      ...student,
+      courseIds: student.courses.map((course) => course.id), // Extract the IDs from the courses array
+      genderId,
+    };
+    updateStudent(studentId, updatedStudent)
       .then((updatedStudent) => {
         setStudent(updatedStudent);
       })
@@ -146,7 +158,7 @@ const EditStudentPage = () => {
               </button>
             </div>
             <div className="col-md-6 w-100 mt-3">
-              <CoursesListStudent courses={student.courses} />
+              <CoursesListStudent student={student} setStudent={setStudent} />
             </div>
           </div>
         </div>

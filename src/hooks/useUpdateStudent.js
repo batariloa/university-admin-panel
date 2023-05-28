@@ -1,35 +1,38 @@
 import { useState } from "react";
+import axios from "axios";
+import { url } from "../global/variables";
 
-const useUpdateStudent = () => {
+export const useUpdateStudent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const updateStudent = async (studentId, updatedData) => {
+  const updateStudent = async (studentId, updatedStudentData) => {
+    setLoading(true);
+    setError(null);
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.data?.accessToken;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
     try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(`/api/students/${studentId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update student.");
-      }
-
-      // Handle the success case, if needed
-    } catch (error) {
-      setError(error.message || "An error occurred.");
-    } finally {
+      const response = await axios.put(
+        url + `/api/student/save-student`,
+        updatedStudentData,
+        config
+      );
       setLoading(false);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      setError("Failed to update student.");
+      setLoading(false);
+      return null;
     }
   };
 
   return { updateStudent, loading, error };
 };
-
-export default useUpdateStudent;

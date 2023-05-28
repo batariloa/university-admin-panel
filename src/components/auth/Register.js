@@ -2,25 +2,31 @@ import { useState, useEffect } from "react";
 import { useRegister } from "../../hooks/useRegister";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useFetchRoles } from "../../hooks/useFetchRoles";
 export function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
+  const [roleId, setRoleId] = useState("User");
+
+  const { roles, loading, errorRoles } = useFetchRoles();
 
   const navigate = useNavigate();
-  const { register, error, isLoading } = useRegister();
+  const { register, error: errorRegister, isLoading } = useRegister();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await register(firstName, lastName, username, email, password);
+    await register(firstName, lastName, email, password, roleId);
+  };
+  const handleRoleChange = (e) => {
+    setRoleId(e.target.value);
   };
 
   useEffect(() => {
-    if (error === null && !isLoading) navigate("/login");
-  }, [error, isLoading, navigate]);
+    if (errorRegister === null && !isLoading) navigate("/login");
+  }, [errorRegister, isLoading, navigate]);
 
   return (
     <div className="Auth-form-container">
@@ -52,19 +58,6 @@ export function Register() {
               placeholder="Email Address"
             />
           </div>
-
-          <div className="form-group mt-3">
-            <label>Username</label>
-            <input
-              onChange={(n) => {
-                setUsername(n.target.value);
-              }}
-              value={username}
-              type="text"
-              className="form-control mt-1"
-              placeholder="e.g Jane Doe"
-            />
-          </div>
           <div className="form-group mt-3">
             <label>Email address</label>
             <input
@@ -90,11 +83,25 @@ export function Register() {
               placeholder="Password"
             />
           </div>
+          <div className="form-group mt-3">
+            <select
+              className="form-control mt-1"
+              value={roleId}
+              onChange={handleRoleChange}
+            >
+              {roles.map((role) => (
+                <option key={role.id} value={role.id}>
+                  {role.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="d-grid gap-2 mt-3">
             <button className="btn btn-primary">Register</button>
           </div>
         </div>
-        {error && <div className="error">{error}</div>}
+
+        {errorRegister && <div className="error">{errorRegister}</div>}
       </form>
       <div className="text-center mt-3">
         Already registered?{" "}
