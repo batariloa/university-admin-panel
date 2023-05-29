@@ -4,11 +4,14 @@ import { useFetchProfessorDetails } from "../../hooks/useFetchProfessorDetails";
 import { useUpdateProfessor } from "../../hooks/useUpdateProfessor";
 import { useFetchCourse } from "../../hooks/useFetchCourses";
 import { useFetchGenders } from "../../hooks/useFetchGenders";
+import { useNavigate } from "react-router-dom";
 
 const EditProfessorPage = () => {
   const { professorId } = useParams();
   const [professor, setProfessor] = useState(null);
   const { genders } = useFetchGenders();
+
+  const navigate = useNavigate();
 
   const {
     professor: fetchedProfessor,
@@ -50,7 +53,8 @@ const EditProfessorPage = () => {
         CourseIds: selectedCourses,
         genderId,
       });
-      // Update success, do something if needed
+
+      navigate("/professors");
     } catch (error) {
       console.error("Error updating Professor:", error);
     }

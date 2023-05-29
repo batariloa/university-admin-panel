@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosClient from "../http/axios";
 import { url } from "../global/variables";
 
 export const useFetchStudents = () => {
@@ -10,16 +10,8 @@ export const useFetchStudents = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const token = user?.data?.accessToken;
-
-        const response = await axios.get(
-          url + "/api/student/get-all-students",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const response = await axiosClient.get(
+          url + "/api/student/get-all-students"
         );
 
         const { data } = response.data;

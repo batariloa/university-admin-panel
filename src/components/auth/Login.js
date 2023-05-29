@@ -5,7 +5,7 @@ import { useLogin } from "../../hooks/useLogin";
 
 import "./css/Login.css";
 
-export function Login() {
+export function LoginPage() {
   const { dispatch } = useAuthContext();
   const navigate = useNavigate();
   const { login, error, isLoading } = useLogin(dispatch);

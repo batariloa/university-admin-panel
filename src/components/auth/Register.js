@@ -3,7 +3,7 @@ import { useRegister } from "../../hooks/useRegister";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useFetchRoles } from "../../hooks/useFetchRoles";
-export function Register() {
+export function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");

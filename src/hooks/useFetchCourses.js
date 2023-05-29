@@ -14,12 +14,7 @@ export const useFetchCourse = () => {
         const token = user?.data?.accessToken;
 
         const response = await axiosClient.get(
-          url + "/api/course/get-all-courses",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          url + "/api/course/get-all-courses"
         );
 
         const { data } = response.data;

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useFetchCourse } from "../../hooks/useFetchCourses";
-import { useUnsubscribeStudentFromCourse } from "../../hooks/useUnsubscribeStudentFromCourse";
 
 export const CoursesListStudent = ({ student, setStudent }) => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const { courses: availableCourses, error, loading } = useFetchCourse();
-  const { unsubscribe } = useUnsubscribeStudentFromCourse();
 
   const handleCourseChange = (e) => {
     setSelectedCourse(e.target.value);
@@ -24,19 +22,14 @@ export const CoursesListStudent = ({ student, setStudent }) => {
   };
 
   const handleUnsubscribe = (courseId) => {
-    unsubscribe(courseId)
-      .then(() => {
-        // Remove the unsubscribed course from the list
-        const updatedCourses = student.courses.filter(
-          (course) => course.id !== courseId
-        );
+    const updatedCourses = student.courses.filter(
+      (course) => course.id !== courseId
+    );
 
-        setStudent((prevStudent) => ({
-          ...prevStudent,
-          courses: updatedCourses,
-        }));
-      })
-      .catch(() => console.log("Failed to unsubscribe"));
+    setStudent((prevStudent) => ({
+      ...prevStudent,
+      courses: updatedCourses,
+    }));
   };
 
   return (

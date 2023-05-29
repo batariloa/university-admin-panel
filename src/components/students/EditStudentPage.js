@@ -4,10 +4,13 @@ import { useFetchStudentDetails } from "../../hooks/useFetchStudentDetails";
 import { useUpdateStudent } from "../../hooks/useUpdateStudent";
 import { CoursesListStudent } from "../courses/CoursesListStudent";
 import { useFetchGenders } from "../../hooks/useFetchGenders";
+import { useNavigate } from "react-router-dom";
 
 const EditStudentPage = () => {
   const { studentId } = useParams();
   const [student, setStudent] = useState(null);
+  const navigate = useNavigate();
+
   const {
     student: fetchedStudent,
     loading,
@@ -40,6 +43,7 @@ const EditStudentPage = () => {
     updateStudent(studentId, updatedStudent)
       .then((updatedStudent) => {
         setStudent(updatedStudent);
+        navigate("/students");
       })
       .catch((error) => {
         console.error("Error updating student:", error);
