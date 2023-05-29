@@ -1,14 +1,19 @@
 import { useLogout } from "../../hooks/useLogout";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
+import logo from "../../assets/logo.png";
 import "./css/Navbar.css";
 
 export function Navbar() {
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+
+  const isAdmin = user && user.data.role === "Admin";
 
   //logout
   const handleLogoutClick = async () => {
@@ -40,7 +45,12 @@ export function Navbar() {
           className={`collapse navbar-collapse ${isNavbarOpen ? "show" : ""}`}
         >
           <a href="/" className="navbar-brand">
-            University Admin Panel
+            <img
+              src={logo}
+              alt="Logo"
+              className="navbar-logo"
+              style={{ width: "230px" }}
+            />
           </a>
           {user && (
             <ul
@@ -62,27 +72,24 @@ export function Navbar() {
                   Professors
                 </Link>
               </li>
+              {isAdmin && (
+                <li key="register" className="nav-item">
+                  <Link
+                    to="/register"
+                    className="nav-link "
+                    aria-current="page"
+                  >
+                    Register User
+                  </Link>
+                </li>
+              )}
               <li key="logout" className="nav-item">
                 <Link className="nav-link" onClick={handleLogoutClick}>
+                  <FontAwesomeIcon
+                    icon={faSignOutAlt}
+                    style={{ marginRight: "5px" }}
+                  />
                   Logout
-                </Link>
-              </li>
-            </ul>
-          )}
-
-          {!user && (
-            <ul
-              className="navbar-nav me-auto mb-2 mb-lg-0"
-              onClick={handleNavbarItemClick}
-            >
-              <li key="register" className="nav-item">
-                <Link to="/register" className="nav-link " aria-current="page">
-                  Register
-                </Link>
-              </li>
-              <li key="login" className="nav-item">
-                <Link to="/login" className="nav-link">
-                  Login
                 </Link>
               </li>
             </ul>

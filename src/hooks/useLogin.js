@@ -1,12 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import axiosClient from "../http/axios";
 import { url } from "../global/variables";
 
 export const useLogin = (dispatch) => {
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
-
-  const abortController = useRef(new AbortController());
 
   const login = async (email, password) => {
     setIsLoading(true);
@@ -26,6 +24,7 @@ export const useLogin = (dispatch) => {
           },
         }
       );
+
       dispatch({ type: "LOGIN", payload: res.data });
       localStorage.setItem("user", JSON.stringify(res.data));
     } catch (err) {

@@ -16,6 +16,8 @@ import ProfessorsPage from "./components/professors/ProfessorsPage";
 import EditProfessorPage from "./components/professors/EditProfessorPage";
 import { AddProfessorPage } from "./components/professors/AddProfessorPage";
 import { setupInterceptors } from "./http/axios";
+import Footer from "./components/footer/Footer";
+import PrivacyPolicyPage from "./components/extras/PrivacyPolicyPage";
 
 function App() {
   const { user, dispatch } = useAuthContext();
@@ -63,7 +65,9 @@ function App() {
           element={user ? <RegisterPage /> : <LoginPage />}
         />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
       </Routes>
+      <Footer></Footer>
     </BrowserRouter>
   );
 }
