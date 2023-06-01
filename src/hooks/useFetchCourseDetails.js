@@ -1,44 +1,41 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axiosClient from "../http/axios";
 import { url } from "../global/variables";
 
 export const useFetchCourseDetails = (courseId) => {
-  const [course, setCourse] = useState(null);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCourseDetails = async () => {
+    const fetchCourses = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const token = user?.data?.accessToken;
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
+        console.log("trying");
 
-        const response = await axios.get(
-          url + `/api/course/get-course-details/${courseId}`,
-          config
+        const response = await axiosClient.get(
+          url + "/api/course/get-course-details/" + courseId
         );
 
+        const { data } = response.data;
+
+        console.log("trying");
         if (response.data.succeeded) {
-          setCourse(response.data.data);
+          setCourses(data);
+          console.log("course data ", data);
         } else {
-          setError("Failed to fetch course details. Please try again.");
+          setError("Failed to fetch courses. Please try again.");
         }
 
         setLoading(false);
       } catch (error) {
-        console.log(error);
-        setError("Failed to fetch course details. Please try again.");
+        console.log("err", error);
+        setError("Failed to fetch courses. Please try again.");
         setLoading(false);
       }
     };
 
-    fetchCourseDetails();
+    fetchCourses();
   }, [courseId]);
 
-  return { course, loading, error };
+  return { courses, loading, error };
 };

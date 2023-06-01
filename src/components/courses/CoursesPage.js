@@ -10,7 +10,7 @@ const CoursesPage = () => {
     <div className="container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Courses</h2>
-        <Link to="/addStudent" className="btn btn-success">
+        <Link to="/addCourse" className="btn btn-success">
           Add course +
         </Link>
       </div>
@@ -23,7 +23,6 @@ const CoursesPage = () => {
             <th>Description</th>
             <th>ESPB</th>
             <th>Modify</th>
-            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -40,11 +39,6 @@ const CoursesPage = () => {
                   course={course}
                 >
                   Edit
-                </Link>
-              </td>
-              <td>
-                <Link to={`/edit/${course.id}`} className="btn btn-danger">
-                  Delete
                 </Link>
               </td>
             </tr>

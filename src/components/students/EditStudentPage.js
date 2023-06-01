@@ -5,10 +5,17 @@ import { useUpdateStudent } from "../../hooks/useUpdateStudent";
 import { CoursesListStudent } from "../courses/CoursesListStudent";
 import { useFetchGenders } from "../../hooks/useFetchGenders";
 import { useNavigate } from "react-router-dom";
+import { useDeleteStudent } from "../../hooks/useDeleteStudent";
 
 const EditStudentPage = () => {
   const { studentId } = useParams();
   const [student, setStudent] = useState(null);
+  const {
+    deleteStudent,
+    loading: deleting,
+    error: deleteError,
+  } = useDeleteStudent();
+
   const navigate = useNavigate();
 
   const {
@@ -40,13 +47,23 @@ const EditStudentPage = () => {
       courseIds: student.courses.map((course) => course.id), // Extract the IDs from the courses array
       genderId,
     };
-    updateStudent(studentId, updatedStudent)
+    updateStudent(updatedStudent)
       .then((updatedStudent) => {
         setStudent(updatedStudent);
         navigate("/students");
       })
       .catch((error) => {
         console.error("Error updating student:", error);
+      });
+  };
+
+  const handleDelete = () => {
+    deleteStudent(studentId)
+      .then(() => {
+        navigate("/students");
+      })
+      .catch((error) => {
+        console.error("Error deleting student:", error);
       });
   };
 
@@ -138,27 +155,24 @@ const EditStudentPage = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="gender" className="form-label mb-0">
-                  Gender
-                </label>
-                <select
+                <label htmlFor="gender">Gender:</label>
+                <input
+                  type="text"
                   className="form-control"
                   id="gender"
-                  value={student.gender}
-                  onChange={(e) =>
-                    setStudent((prevStudent) => ({
-                      ...prevStudent,
-                      gender: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
+                  value={student?.gender || ""}
+                  readOnly
+                />
               </div>
               <button className="btn btn-primary" onClick={handleUpdate}>
                 Update
+              </button>
+              <button
+                className="btn btn-danger ml-3"
+                style={{ marginLeft: "10px" }}
+                onClick={handleDelete}
+              >
+                Delete
               </button>
             </div>
             <div className="col-md-6 w-100 mt-3">

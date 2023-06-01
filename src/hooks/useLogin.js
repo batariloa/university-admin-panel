@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axiosClient from "../http/axios";
+import axios from "axios";
 import { url } from "../global/variables";
 
 export const useLogin = (dispatch) => {
@@ -11,7 +11,7 @@ export const useLogin = (dispatch) => {
     setError(null);
 
     try {
-      const res = await axiosClient.post(
+      const res = await axios.post(
         url + "/api/user/login",
         {
           email,

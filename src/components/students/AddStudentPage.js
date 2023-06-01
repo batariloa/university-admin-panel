@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useUpdateProfessor } from "../../hooks/useUpdateProfessor";
+import { useUpdateStudent } from "../../hooks/useUpdateStudent";
 import { useFetchGenders } from "../../hooks/useFetchGenders";
-import "./css/professorsPage.css";
 
-export const AddProfessorPage = ({}) => {
+const AddStudentPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [idNumber, setIdNumber] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
-  const { updateProfessor, loading, error } = useUpdateProfessor();
+
   const {
     genders,
     loading: gendersLoading,
     error: gendersError,
   } = useFetchGenders();
+
+  const { updateStudent, loading, error } = useUpdateStudent();
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -22,6 +24,10 @@ export const AddProfessorPage = ({}) => {
 
   const handleLastNameChange = (e) => {
     setLastName(e.target.value);
+  };
+
+  const handleIdNumberChange = (e) => {
+    setIdNumber(e.target.value);
   };
 
   const handleEmailChange = (e) => {
@@ -35,16 +41,16 @@ export const AddProfessorPage = ({}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const updatedProfessorData = {
+    const newStudentData = {
       firstName,
       lastName,
+      idNumber,
       email,
       genderId: gender,
       courseIds: [],
     };
 
-    // Call the updateProfessor function from the hook
-    updateProfessor({}, updatedProfessorData);
+    updateStudent(null, newStudentData);
   };
 
   if (gendersLoading) {
@@ -58,7 +64,10 @@ export const AddProfessorPage = ({}) => {
   return (
     <div className="container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Add Professor</h2>
+        <h2>Add Student</h2>
+        <Link to="/students" className="btn btn-secondary">
+          Back to Students
+        </Link>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -79,6 +88,16 @@ export const AddProfessorPage = ({}) => {
             className="form-control"
             value={lastName}
             onChange={handleLastNameChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="idNumber">ID Number:</label>
+          <input
+            type="text"
+            id="idNumber"
+            className="form-control"
+            value={idNumber}
+            onChange={handleIdNumberChange}
           />
         </div>
         <div className="mb-3">
@@ -109,9 +128,11 @@ export const AddProfessorPage = ({}) => {
         </div>
         {error && <div className="text-danger mb-3">{error}</div>}
         <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? "Updating..." : "Update Professor"}
+          {loading ? "Creating..." : "Create Student"}
         </button>
       </form>
     </div>
   );
 };
+
+export default AddStudentPage;

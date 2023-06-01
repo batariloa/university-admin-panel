@@ -5,6 +5,7 @@ import { useUpdateProfessor } from "../../hooks/useUpdateProfessor";
 import { useFetchCourse } from "../../hooks/useFetchCourses";
 import { useFetchGenders } from "../../hooks/useFetchGenders";
 import { useNavigate } from "react-router-dom";
+import { useDeleteProfessor } from "../../hooks/useDeleteProfessor";
 
 const EditProfessorPage = () => {
   const { professorId } = useParams();
@@ -25,6 +26,12 @@ const EditProfessorPage = () => {
     loading: updateLoading,
     error: updateError,
   } = useUpdateProfessor();
+
+  const {
+    deleteProfessor,
+    loading: deleting,
+    error: deleteError,
+  } = useDeleteProfessor();
 
   const { courses: allCourses } = useFetchCourse();
 
@@ -71,6 +78,16 @@ const EditProfessorPage = () => {
         courseId,
       ]);
     }
+  };
+
+  const handleDelete = () => {
+    deleteProfessor(professorId)
+      .then(() => {
+        navigate("/professors");
+      })
+      .catch((error) => {
+        console.error("Error deleting student:", error);
+      });
   };
 
   if (loading) {
@@ -171,6 +188,13 @@ const EditProfessorPage = () => {
               </div>
               <button className="btn btn-primary" onClick={handleUpdate}>
                 Update
+              </button>
+              <button
+                className="btn btn-danger ml-3"
+                style={{ marginLeft: "10px" }}
+                onClick={handleDelete}
+              >
+                Delete
               </button>
             </div>
           </div>

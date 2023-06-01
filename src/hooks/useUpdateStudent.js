@@ -6,7 +6,7 @@ export const useUpdateStudent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const updateStudent = async (studentId, updatedStudentData) => {
+  const updateStudent = async (updatedStudentData) => {
     setLoading(true);
     setError(null);
 

@@ -18,10 +18,15 @@ import { AddProfessorPage } from "./components/professors/AddProfessorPage";
 import { setupInterceptors } from "./http/axios";
 import Footer from "./components/footer/Footer";
 import PrivacyPolicyPage from "./components/extras/PrivacyPolicyPage";
+import { userIsAdmin } from "./util/isAdmin";
+import AddCoursePage from "./components/courses/AddCoursePage";
+import AddStudentPage from "./components/students/AddStudentPage";
 
 function App() {
   const { user, dispatch } = useAuthContext();
   setupInterceptors(dispatch);
+
+  const isAdmin = userIsAdmin(user);
 
   return (
     <BrowserRouter>
@@ -30,11 +35,15 @@ function App() {
         <Route path="/" element={user ? <CoursesPage /> : <LoginPage />} />
         <Route
           path="/addCourse"
-          element={user ? <CourseForm /> : <LoginPage />}
+          element={user ? <AddCoursePage /> : <AddCoursePage />}
         />
         <Route
           path="/addProfessor"
           element={user ? <AddProfessorPage /> : <LoginPage />}
+        />
+        <Route
+          path="/addStudent"
+          element={user ? <AddStudentPage /> : <LoginPage />}
         />
         <Route
           path="/students"
@@ -48,6 +57,7 @@ function App() {
           path="/professors"
           element={user ? <ProfessorsPage /> : <LoginPage />}
         />
+
         <Route
           path="/editStudent/:studentId"
           element={user ? <EditStudentPage /> : <LoginPage />}
@@ -62,7 +72,7 @@ function App() {
         />
         <Route
           path="/register"
-          element={user ? <RegisterPage /> : <LoginPage />}
+          element={isAdmin ? <RegisterPage /> : <LoginPage />}
         />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />

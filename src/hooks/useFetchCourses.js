@@ -10,9 +10,6 @@ export const useFetchCourse = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const token = user?.data?.accessToken;
-
         const response = await axiosClient.get(
           url + "/api/course/get-all-courses"
         );
@@ -21,6 +18,7 @@ export const useFetchCourse = () => {
 
         if (response.data.succeeded) {
           setCourses(data);
+          console.log("course data ", data);
         } else {
           setError("Failed to fetch courses. Please try again.");
         }

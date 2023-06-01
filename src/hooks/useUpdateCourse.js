@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosClient from "../http/axios";
 import { url } from "../global/variables";
 
 export const useUpdateCourse = () => {
@@ -11,18 +11,9 @@ export const useUpdateCourse = () => {
     setError(null);
 
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const token = user?.data?.accessToken;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.put(
+      const response = await axiosClient.put(
         url + `/api/course/save-course`,
-        updatedCourseData,
-        config
+        updatedCourseData
       );
 
       setLoading(false);

@@ -11,7 +11,6 @@ export const CoursesListDashboard = ({ courses }) => {
           <th>Description</th>
           <th>ESPB</th>
           <th>Modify</th>
-          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -24,11 +23,6 @@ export const CoursesListDashboard = ({ courses }) => {
             <td>
               <Link to={`/edit/${course.id}`} className="btn btn-primary">
                 Edit
-              </Link>
-            </td>
-            <td>
-              <Link to={`/delete/${course.id}`} className="btn btn-danger">
-                Delete
               </Link>
             </td>
           </tr>

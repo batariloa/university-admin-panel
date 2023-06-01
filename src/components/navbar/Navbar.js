@@ -4,16 +4,15 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-
 import logo from "../../assets/logo.png";
 import "./css/Navbar.css";
+import { userIsAdmin } from "../../util/isAdmin";
 
 export function Navbar() {
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
-
-  const isAdmin = user && user.data.role === "Admin";
+  const isAdmin = userIsAdmin(user);
 
   //logout
   const handleLogoutClick = async () => {
