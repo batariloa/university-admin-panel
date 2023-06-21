@@ -18,6 +18,7 @@ export const setupInterceptors = (dispatch, navigate) => {
       if (error.response && error.response.status === 401) {
         if (error.response.status === 401) localStorage.removeItem("user");
         dispatch({ type: "LOGOUT" });
+        navigate("/login");
       }
 
       return Promise.reject(error);

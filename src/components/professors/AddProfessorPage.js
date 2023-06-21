@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useUpdateProfessor } from "../../hooks/useUpdateProfessor";
 import { useFetchGenders } from "../../hooks/useFetchGenders";
 import "./css/professorsPage.css";
-
+import { useNavigate } from "react-router";
 export const AddProfessorPage = ({}) => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -43,9 +43,14 @@ export const AddProfessorPage = ({}) => {
       courseIds: [],
     };
 
-    // Call the updateProfessor function from the hook
-    updateProfessor({}, updatedProfessorData);
+    updateProfessor(updatedProfessorData);
   };
+
+  useEffect(() => {
+    if (!loading && error === null) {
+      navigate("/professors");
+    }
+  }, [loading, error, navigate]);
 
   if (gendersLoading) {
     return <div>Loading genders...</div>;
@@ -109,7 +114,7 @@ export const AddProfessorPage = ({}) => {
         </div>
         {error && <div className="text-danger mb-3">{error}</div>}
         <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? "Updating..." : "Update Professor"}
+          {loading ? "Updating..." : "Save Professor"}
         </button>
       </form>
     </div>

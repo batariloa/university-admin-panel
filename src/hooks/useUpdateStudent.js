@@ -1,28 +1,19 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosClient from "../http/axios";
 import { url } from "../global/variables";
 
 export const useUpdateStudent = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState();
 
   const updateStudent = async (updatedStudentData) => {
     setLoading(true);
     setError(null);
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user?.data?.accessToken;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
     try {
-      const response = await axios.put(
+      const response = await axiosClient.put(
         url + `/api/student/save-student`,
-        updatedStudentData,
-        config
+        updatedStudentData
       );
       setLoading(false);
       return response.data;
@@ -30,7 +21,6 @@ export const useUpdateStudent = () => {
       console.log(error);
       setError("Failed to update student.");
       setLoading(false);
-      return null;
     }
   };
 

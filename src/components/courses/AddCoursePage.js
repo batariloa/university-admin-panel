@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUpdateCourse } from "../../hooks/useUpdateCourse";
+import { useEffect } from "react";
 
 const AddCoursePage = () => {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [description, setDescription] = useState("");
   const [espb, setEspb] = useState(0);
+
+  const navigate = useNavigate();
 
   const { updateCourse, loading, error } = useUpdateCourse();
 
@@ -38,6 +41,12 @@ const AddCoursePage = () => {
 
     updateCourse(newCourseData);
   };
+
+  useEffect(() => {
+    if (!loading && error === null) {
+      navigate("/courses");
+    }
+  }, [loading, error, navigate]);
 
   return (
     <div className="container">

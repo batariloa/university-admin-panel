@@ -55,7 +55,7 @@ const EditProfessorPage = () => {
         (gender) => gender.name === fetchedProfessor.gender
       ).id;
 
-      await updateProfessor(professorId, {
+      await updateProfessor({
         ...professor,
         CourseIds: selectedCourses,
         genderId,

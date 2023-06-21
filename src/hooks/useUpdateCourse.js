@@ -4,7 +4,7 @@ import { url } from "../global/variables";
 
 export const useUpdateCourse = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState();
 
   const updateCourse = async (updatedCourseData) => {
     setLoading(true);

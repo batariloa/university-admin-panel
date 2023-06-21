@@ -10,6 +10,7 @@ import { useDeleteStudent } from "../../hooks/useDeleteStudent";
 const EditStudentPage = () => {
   const { studentId } = useParams();
   const [student, setStudent] = useState(null);
+
   const {
     deleteStudent,
     loading: deleting,

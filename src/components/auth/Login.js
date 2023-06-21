@@ -53,9 +53,6 @@ export function LoginPage() {
           </div>
         </div>
       </form>
-      <div className="mt-2">
-        Don't have an account? <Link to="/register">Register</Link>
-      </div>
       {error && <span className="error">{error}</span>}
     </div>
   );

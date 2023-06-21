@@ -1,28 +1,19 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosClient from "../http/axios";
 import { url } from "../global/variables";
 
 export const useUpdateProfessor = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState();
 
-  const updateProfessor = async (professorId, updatedProfessorData) => {
+  const updateProfessor = async (updatedProfessorData) => {
     setLoading(true);
     setError(null);
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user?.data?.accessToken;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
     try {
-      const response = await axios.put(
+      const response = await axiosClient.put(
         url + `/api/professor/save-professor`,
-        updatedProfessorData,
-        config
+        updatedProfessorData
       );
       setLoading(false);
       return response.data;

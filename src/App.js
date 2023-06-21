@@ -5,9 +5,9 @@ import { LoginPage } from "./components/auth/Login";
 import { RegisterPage } from "./components/auth/Register";
 import { Navbar } from "./components/navbar/Navbar";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import CourseForm from "./components/courses/CourseForm";
 import StudentsPage from "./components/students/StudentPage";
 import CoursesPage from "./components/courses/CoursesPage";
 import EditStudentPage from "./components/students/EditStudentPage";
@@ -24,12 +24,14 @@ import AddStudentPage from "./components/students/AddStudentPage";
 
 function App() {
   const { user, dispatch } = useAuthContext();
-  setupInterceptors(dispatch);
+  const navigate = useNavigate();
+  setupInterceptors(dispatch, navigate);
 
   const isAdmin = userIsAdmin(user);
 
   return (
-    <BrowserRouter>
+    <>
+      {" "}
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={user ? <CoursesPage /> : <LoginPage />} />
@@ -78,7 +80,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
       </Routes>
       <Footer></Footer>
-    </BrowserRouter>
+    </>
   );
 }
 

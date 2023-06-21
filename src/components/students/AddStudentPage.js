@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUpdateStudent } from "../../hooks/useUpdateStudent";
 import { useFetchGenders } from "../../hooks/useFetchGenders";
-
+import { useEffect } from "react";
 const AddStudentPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -10,6 +10,7 @@ const AddStudentPage = () => {
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
 
+  const navigate = useNavigate();
   const {
     genders,
     loading: gendersLoading,
@@ -50,8 +51,14 @@ const AddStudentPage = () => {
       courseIds: [],
     };
 
-    updateStudent(null, newStudentData);
+    updateStudent(newStudentData);
   };
+
+  useEffect(() => {
+    if (!loading && error === null) {
+      navigate("/students");
+    }
+  }, [loading, error, navigate]);
 
   if (gendersLoading) {
     return <div>Loading genders...</div>;
@@ -126,7 +133,11 @@ const AddStudentPage = () => {
             ))}
           </select>
         </div>
-        {error && <div className="text-danger mb-3">{error}</div>}
+        {error && (
+          <div className="text-danger mb-3">
+            Please fill all the required fields.
+          </div>
+        )}
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? "Creating..." : "Create Student"}
         </button>
